@@ -71,7 +71,7 @@ class MissingReturnTagSniff implements Sniff
                 if ($fix === true) {
                     // Add @return tag with the detected type before the closing comment tag.
                     $closeCommentPtr = $phpcsFile->findNext(T_DOC_COMMENT_CLOSE_TAG, $docCommentPtr);
-                    $phpcsFile->fixer->addContentBefore($closeCommentPtr, "*\n * @return $returnType\n");
+                    $phpcsFile->fixer->addContentBefore($closeCommentPtr, "*\n * @return $returnType\n ");
                 }
             }
         }
