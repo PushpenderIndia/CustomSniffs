@@ -31,6 +31,8 @@ phpcs --standard=rtSniffs .
 
 ## Current Coding Sniffs 
 - [X] `Sniffs.Commenting.MissingReturnTagSniff`: Checks if docblock contains `@return` Type
+- [X] `Sniffs.Spacing.ExcessiveBlankLineSniff`: Detects more than one consecutive blank line.
+- [X] `Sniffs.Spacing.MissingSpaceBeforeCommentSniff`: Checking if there is a space before start of single line comment.
 
 ## TODO
 - [ ] ValidateFunctionReturnType: Validate the function return type and if exceptions are not handled then throw warning

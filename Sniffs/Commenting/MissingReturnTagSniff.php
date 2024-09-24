@@ -64,7 +64,7 @@ class MissingReturnTagSniff implements Sniff
 
             // If @return is missing, autofix it.
             if (!$hasReturnTag) {
-                $error = 'Function "%s" is missing a @return tag in the docblock.';
+                $error = '[rtSniffs] Function "%s" is missing a @return tag in the docblock.';
                 $data  = [$functionName];
                 $fix   = $phpcsFile->addFixableError($error, $stackPtr, 'MissingReturnTag', $data);
 
