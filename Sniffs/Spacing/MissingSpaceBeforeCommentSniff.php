@@ -1,6 +1,6 @@
 <?php
 /**
- * Sniff for checking if there is a space before start of single line comment.
+ * Sniff for checking if there is a space before the start of a single-line comment.
  *
  * @author Pushpender Singh
  * @link   https://github.com/PushpenderIndia
@@ -14,7 +14,7 @@ use PHP_CodeSniffer\Sniffs\Sniff;
 use PHP_CodeSniffer\Files\File;
 
 /**
- * Sniff to ensure there is a space before a comment.
+ * Sniff to ensure there is a space before a single-line comment.
  */
 class MissingSpaceBeforeCommentSniff implements Sniff
 {
@@ -25,7 +25,7 @@ class MissingSpaceBeforeCommentSniff implements Sniff
      */
     public function register()
     {
-        return [T_COMMENT, T_DOC_COMMENT_OPEN_TAG];
+        return [T_COMMENT];
     }
 
     /**
@@ -40,14 +40,18 @@ class MissingSpaceBeforeCommentSniff implements Sniff
     {
         $tokens = $phpcsFile->getTokens();
 
-        // Check if there is no whitespace before the comment.
-        if ($stackPtr > 0 && $tokens[$stackPtr - 1]['code'] !== T_WHITESPACE) {
-            $error = '[rtSniffs] Expected space before comment';
-            $fix   = $phpcsFile->addFixableError($error, $stackPtr, 'MissingSpaceBeforeComment');
+        // Check if it's a single-line comment (// or #)
+        if (strpos($tokens[$stackPtr]['content'], '//') === 0 || strpos($tokens[$stackPtr]['content'], '#') === 0) {
+            $previousToken = $phpcsFile->findPrevious(T_WHITESPACE, ($stackPtr - 1), null, true);
 
-            if ($fix === true) {
-                // Insert a space before the comment.
-                $phpcsFile->fixer->addContentBefore($stackPtr, ' ');
+            // Ensure there is at least one space between the previous token and the comment.
+            if ($tokens[$stackPtr]['line'] === $tokens[$previousToken]['line'] && 
+                $tokens[$stackPtr]['column'] <= $tokens[$previousToken]['column'] + 1) {
+                $phpcsFile->addError(
+                    '[rtSniffs] Expected at least one space before the single-line comment',
+                    $stackPtr,
+                    'MissingSpaceBeforeComment'
+                );
             }
         }
     }
